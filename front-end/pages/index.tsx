@@ -1,12 +1,12 @@
-import Head from "next/head"
-import Image from "next/image"
-import Header from "@components/header"
-import styles from "@styles/home.module.css"
-import { useTranslation } from "next-i18next"
-import { serverSideTranslations } from "next-i18next/serverSideTranslations"
+import Head from "next/head";
+import Image from "next/image";
+import Header from "@components/header";
+import styles from "@styles/home.module.css";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 const Home: React.FC = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   return (
     <>
@@ -44,7 +44,7 @@ export const getServerSideProps = async (context) => {
     props: {
       ...(await serverSideTranslations(locale ?? "en", ["common"])),
     },
-  }
-}
+  };
+};
 
-export default Home
+export default Home;

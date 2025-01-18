@@ -1,16 +1,25 @@
-import Header from '@components/header';
-import TeacherOverview from '@components/teachers/TeacherOverview';
-import TeacherService from '@services/TeacherService';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import Head from 'next/head';
-import useSWR from 'swr';
+import Header from "@components/header";
+import TeacherOverview from "@components/teachers/TeacherOverview";
+import TeacherService from "@services/TeacherService";
+import { StatusMessage } from "@types";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import Head from "next/head";
+import { useState } from "react";
+import useSWR from "swr";
 
 const Teachers: React.FC = () => {
-  const fetcher = async (key: string) => {
-    /* Use the TeacherService to fetch all teachers */
+  const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
+
+  const getAllTeachers = async () => {
+    const response = await TeacherService.getAllTeachers();
+    const teachers = await response.json();
+
+    if (response.status === 200) {
+      return teachers;
+    }
   };
 
-  const { data, isLoading, error } = useSWR('Teachers', fetcher);
+  const { data, isLoading, error } = useSWR("Teachers", getAllTeachers);
 
   return (
     <>
@@ -24,7 +33,7 @@ const Teachers: React.FC = () => {
         <section className="mt-5">
           {error && <p className="text-danger">{error}</p>}
           {isLoading && <p>Loading...</p>}
-          {/* Use the TeacherOverview component to render data */}
+          {data && <TeacherOverview teachers={data} />}{" "}
         </section>
       </main>
     </>
@@ -36,7 +45,7 @@ export const getServerSideProps = async (context) => {
 
   return {
     props: {
-      ...(await serverSideTranslations(locale ?? 'en', ['common'])),
+      ...(await serverSideTranslations(locale ?? "en", ["common"])),
     },
   };
 };

@@ -1,6 +1,6 @@
-import LearningPath from '@components/learning-path';
-import { Teacher, User } from '@types';
-import { useEffect, useState } from 'react';
+import LearningPath from "@components/learning-path";
+import { Teacher, User } from "@types";
+import { useEffect, useState } from "react";
 
 type Props = {
   teachers: Teacher[];
@@ -10,7 +10,7 @@ const TeacherOverview: React.FC<Props> = ({ teachers }: Props) => {
   const [loggedInUser, setLoggedInUser] = useState<User>(null);
 
   useEffect(() => {
-    setLoggedInUser(JSON.parse(sessionStorage.getItem('loggedInUser')));
+    setLoggedInUser(JSON.parse(sessionStorage.getItem("loggedInUser")));
   }, []);
 
   return (
@@ -24,8 +24,33 @@ const TeacherOverview: React.FC<Props> = ({ teachers }: Props) => {
             </tr>
           </thead>
           <tbody>
-            {/* Render a row for each teacher containing name and learning path */}
-            {/* For question 1.c, you can use the LearningPath component. */}
+            {teachers &&
+              loggedInUser?.role !== "admin" &&
+              teachers.map((teacher) => (
+                <tr key={teacher.id}>
+                  <td>
+                    {teacher.user.lastName} {teacher.user.firstName}
+                  </td>
+                  <td>{teacher.learningPath}</td>
+                </tr>
+              ))}
+            {loggedInUser?.role === "admin" &&
+              teachers &&
+              teachers.map((teacher) => (
+                <tr key={teacher.id}>
+                  <td>
+                    {teacher.user.lastName} {teacher.user.firstName}
+                  </td>
+                  <td>
+                    {
+                      <LearningPath
+                        teacherId={teacher.user.id}
+                        learningPath={teacher.learningPath}
+                      />
+                    }
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </section>

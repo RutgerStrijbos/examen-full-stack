@@ -15,7 +15,7 @@ type UserInput = {
 type TeacherInput = {
     id?: number;
     user?: UserInput;
-    phase?: string;
+    learningPath?: string;
 };
 
 type AuthenticationResponse = {

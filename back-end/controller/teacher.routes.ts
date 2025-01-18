@@ -16,6 +16,8 @@
  */
 import express, { NextFunction, Request, Response } from 'express';
 import teacherService from '../service/teacher.service';
+import { Role, TeacherInput, UserInput } from '../types/index';
+import jwt from 'jsonwebtoken';
 
 const teacherRouter = express.Router();
 
@@ -34,12 +36,21 @@ const teacherRouter = express.Router();
  *               items:
  *                  $ref: '#/components/schemas/Teacher'
  */
-teacherRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {});
+teacherRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const teachers = await teacherService.getAllTeachers();
+        res.status(200).json(teachers);
+    } catch (error) {
+        next(error);
+    }
+});
 
 /**
  * @swagger
  * /teachers/{teacherId}/learningPath:
  *   put:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Update the learning path of a teacher
  *     parameters:
  *       - in: path
@@ -48,11 +59,14 @@ teacherRouter.get('/', async (req: Request, res: Response, next: NextFunction) =
  *         schema:
  *           type: integer
  *         description: The teacher ID
- *       - in: query
+ *       - in: body
  *         name: learningPath
  *         required: true
  *         schema:
- *           type: string
+ *           type: object
+ *           properties:
+ *             learningPath:
+ *               type: string
  *         description: The learning path
  *     responses:
  *       200:
@@ -64,7 +78,22 @@ teacherRouter.get('/', async (req: Request, res: Response, next: NextFunction) =
  */
 teacherRouter.put(
     '/:teacherId/learningpath',
-    async (req: Request, res: Response, next: NextFunction) => {}
+    async (req: Request & { auth?: any }, res: Response, next: NextFunction) => {
+        try {
+            const teacherId = parseInt(req.params.teacherId);
+            const learningPath = req.body.learningPath;
+            const userRole = req.auth.role as Role;
+            console.log(userRole);
+            // const teacher = await teacherService.updateLearningPath(
+            //     teacherId,
+            //     learningPath,
+            //     userRole
+            // );
+            // res.status(200).json(teacher);
+        } catch (error) {
+            next(error);
+        }
+    }
 );
 
 export { teacherRouter };

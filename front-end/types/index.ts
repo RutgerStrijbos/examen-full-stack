@@ -5,6 +5,7 @@ export type Teacher = {
 };
 
 export type User = {
+  id?: number;
   firstName?: string;
   lastName?: string;
   fullname?: string;
@@ -16,5 +17,5 @@ export type User = {
 
 export type StatusMessage = {
   message: string;
-  type: 'error' | 'success';
+  type: "error" | "success";
 };
