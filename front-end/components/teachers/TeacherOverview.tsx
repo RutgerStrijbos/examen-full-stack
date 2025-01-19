@@ -44,7 +44,7 @@ const TeacherOverview: React.FC<Props> = ({ teachers }: Props) => {
                   <td>
                     {
                       <LearningPath
-                        teacherId={teacher.user.id}
+                        teacherId={teacher.id}
                         learningPath={teacher.learningPath}
                       />
                     }

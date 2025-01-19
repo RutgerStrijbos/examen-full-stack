@@ -88,6 +88,8 @@ const userRouter = express.Router();
  * @swagger
  * /users:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get the list of users
  *     responses:
  *       200:

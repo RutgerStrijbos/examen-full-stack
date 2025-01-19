@@ -25,4 +25,9 @@ type AuthenticationResponse = {
     role: string;
 };
 
-export { Role, TeacherInput, UserInput, AuthenticationResponse };
+type ClassRoomInput = {
+    id?: number;
+    name?: string;
+};
+
+export { Role, TeacherInput, UserInput, AuthenticationResponse, ClassRoomInput };

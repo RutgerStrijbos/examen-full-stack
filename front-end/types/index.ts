@@ -19,3 +19,8 @@ export type StatusMessage = {
   message: string;
   type: "error" | "success";
 };
+
+export type Classroom = {
+  id?: number;
+  name: string;
+};

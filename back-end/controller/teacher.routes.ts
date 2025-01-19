@@ -17,7 +17,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import teacherService from '../service/teacher.service';
 import { Role, TeacherInput, UserInput } from '../types/index';
-import jwt from 'jsonwebtoken';
 
 const teacherRouter = express.Router();
 
@@ -59,14 +58,11 @@ teacherRouter.get('/', async (req: Request, res: Response, next: NextFunction) =
  *         schema:
  *           type: integer
  *         description: The teacher ID
- *       - in: body
+ *       - in: query
  *         name: learningPath
  *         required: true
  *         schema:
- *           type: object
- *           properties:
- *             learningPath:
- *               type: string
+ *           type: string
  *         description: The learning path
  *     responses:
  *       200:
@@ -81,15 +77,14 @@ teacherRouter.put(
     async (req: Request & { auth?: any }, res: Response, next: NextFunction) => {
         try {
             const teacherId = parseInt(req.params.teacherId);
-            const learningPath = req.body.learningPath;
+            const learningPath = req.query.learningPath as string;
             const userRole = req.auth.role as Role;
-            console.log(userRole);
-            // const teacher = await teacherService.updateLearningPath(
-            //     teacherId,
-            //     learningPath,
-            //     userRole
-            // );
-            // res.status(200).json(teacher);
+            const teacher = await teacherService.updateLearningPath(
+                teacherId,
+                learningPath,
+                userRole
+            );
+            res.status(200).json(teacher);
         } catch (error) {
             next(error);
         }

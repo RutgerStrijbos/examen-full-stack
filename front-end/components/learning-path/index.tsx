@@ -1,4 +1,5 @@
 import TeacherService from "@services/TeacherService";
+import { StatusMessage } from "@types";
 import { useState } from "react";
 
 type Props = {
@@ -7,6 +8,10 @@ type Props = {
 };
 
 const LearningPath: React.FC<Props> = ({ teacherId, learningPath }: Props) => {
+  const [selectedLearningPath, setSelectedLearningPath] =
+    useState<string>(learningPath);
+  const [statusMessage, setStatusMessage] = useState<StatusMessage>();
+
   const handleLearningPathChange = async (event: {
     target: { value: string };
   }) => {
@@ -16,10 +21,18 @@ const LearningPath: React.FC<Props> = ({ teacherId, learningPath }: Props) => {
       newLearningPath
     );
 
-    // if (response.status === 200) {
-    //   console.log("Learning path updated successfully");
-    //   learningPath = newLearningPath;
-    // }
+    if (response.status === 200) {
+      setSelectedLearningPath(newLearningPath);
+      setStatusMessage({
+        type: "success",
+        message: `Learning path updated successfully to ${newLearningPath}`,
+      });
+    } else {
+      setStatusMessage({
+        type: "error",
+        message: "Error updating learning path",
+      });
+    }
   };
 
   return (
@@ -27,13 +40,24 @@ const LearningPath: React.FC<Props> = ({ teacherId, learningPath }: Props) => {
       <select
         id="learningPath"
         className="ml-2 p-1"
-        value={learningPath}
+        value={selectedLearningPath}
         onChange={handleLearningPathChange}
       >
         <option value="Infrastructure">Infrastructure</option>
         <option value="Software development">Software development</option>
         <option value="Cybersecurity">Cybersecurity</option>
       </select>
+      {/* <div className="status-messages">
+        {statusMessage && (
+          <div
+            className={
+              statusMessage.type === "error" ? "text-red-800" : "text-green-800"
+            }
+          >
+            {statusMessage.message}
+          </div>
+        )}
+      </div> */}
     </div>
   );
 };

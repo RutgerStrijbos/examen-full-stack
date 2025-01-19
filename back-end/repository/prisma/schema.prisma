@@ -26,3 +26,8 @@ model User {
   role      String
   teacher   Teacher?
 }
+
+model ClassRoom {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+}

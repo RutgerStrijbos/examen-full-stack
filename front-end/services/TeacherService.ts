@@ -1,6 +1,5 @@
 const getToken = (): string => {
   const loggedInUserString = sessionStorage.getItem("loggedInUser");
-  console.log(loggedInUserString);
   return loggedInUserString ? JSON.parse(loggedInUserString).token : "";
 };
 
@@ -14,14 +13,14 @@ const getAllTeachers = () => {
 
 const updateLearningPath = (teacherId: number, learningPath: string) => {
   return fetch(
-    process.env.NEXT_PUBLIC_API_URL + `/teachers/${teacherId}/learningpath`,
+    process.env.NEXT_PUBLIC_API_URL +
+      `/teachers/${teacherId}/learningPath?learningPath=${learningPath}`,
     {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${getToken()}`,
       },
-      body: JSON.stringify({ learningPath }),
     }
   );
   /*
